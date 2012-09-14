@@ -6,7 +6,6 @@ require 'factory_girl'
 # SimpleCov.start
 
 require 'date_scopes'
-require './spec/lib/shared_date_scopes.rb'
 
 Dir[File.join(%w[ . spec support ** *.rb])].each {|f| require f}
 
