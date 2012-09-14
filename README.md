@@ -2,9 +2,12 @@
 
 A super tiny gem that provides basic year, month and week scopes.
 
+[![Build Status](https://secure.travis-ci.org/speartail/date_scopes.png)](http://travis-ci.org/speartail/date_scopes)
+
 ## TODO
 
 * More specs
+* Make the specs run properly when included
 * Add support for specifying another field instead of :created\_at
 
 ## Installation
@@ -19,6 +22,12 @@ And then execute:
 
 If you want to test that your models are using it properly, you can do:
 
+1. include it in spec_helper.rb
+```ruby
+require 'date_scopes/spec_support'
+```
+
+2. and inside your model_spec.rb
 ```ruby
 it_should_behave_like 'shared date scopes' do
   let(:kind) { MyModelName }
