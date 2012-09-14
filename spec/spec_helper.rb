@@ -1,13 +1,14 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'factory_girl'
+require 'timecop'
 
 # require 'simplecov'
 # SimpleCov.start
 
 require 'date_scopes'
-
 Dir[File.join(%w[ . spec support ** *.rb])].each {|f| require f}
+require 'date_scopes/spec_support'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
