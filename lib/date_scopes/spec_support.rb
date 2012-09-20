@@ -2,7 +2,7 @@ shared_examples_for 'shared date scopes' do
 
   before :each do
     @count = 4
-    @count.times { create kind.name.underscore.to_sym }
+    @count.times { FactoryGirl.create kind.name.underscore.to_sym }
   end
 
   let(:old_item) { kind.first }

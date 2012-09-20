@@ -30,7 +30,7 @@ require 'date_scopes/spec_support'
 2. and inside your model_spec.rb
 ```ruby
 it_should_behave_like 'shared date scopes' do
-  let(:kind) { MyModelName }
+    let(:kind) { MyModelName }
 end
 ```
 
