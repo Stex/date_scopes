@@ -36,7 +36,7 @@ shared_examples_for 'shared date scopes' do
     kind.next_week.count.should eq(1)
   end
 
-  describe 'in_xxxx_of' do
+  describe 'in_(week|month|year)_of' do
 
     let(:date) { Date.today - 3.years }
 
