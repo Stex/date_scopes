@@ -12,7 +12,6 @@ shared_examples_for 'shared date scopes' do
   end
 
   it 'should support last_year, this_year and next_year' do
-    kind.all.each { |i| p "#{i.id} #{i.created_at}" }
     @old_item.update_attribute :created_at, Time.now - 1.years
     @new_item.update_attribute :created_at, Time.now + 1.years
     kind.all.each { |i| p "#{i.id} #{i.created_at}" }
