@@ -4,7 +4,10 @@ require 'factory_girl'
 require 'timecop'
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec/support/'
+  add_filter 'spec_support.rb'
+end
 
 require 'simple_date_scopes'
 Dir[File.join(%w[ . spec support ** *.rb])].each {|f| require f}
