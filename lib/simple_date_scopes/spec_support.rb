@@ -39,6 +39,14 @@ shared_examples_for 'simple date scopes' do
     kind.next_week.count.should eq(1)
   end
 
+  it 'should support yesterday, today and tomorrow' do
+    @old_item.update_attribute :created_at, Time.now - 1.day
+    @new_item.update_attribute :created_at, Time.now + 1.day
+    kind.yesterday.count.should eq(1)
+    kind.today.count.should eq(2)
+    kind.tomorrow.count.should eq(1)
+  end
+
   describe 'in_(week|month|year)_of' do
 
     let(:date) { Date.today - 3.years }
@@ -57,6 +65,34 @@ shared_examples_for 'simple date scopes' do
 
     it 'should support in_week_of' do
       kind.in_week_of(date).length.should eq(1)
+    end
+
+  end
+
+  describe 'handling days' do
+
+    it 'should work in the past' do
+      Timecop.travel(Date.today.beginning_of_day - 1.day) do
+        kind.yesterday.count.should eq(0)
+        kind.today.count.should eq(0)
+        kind.tomorrow.count.should eq(@count)
+      end
+    end
+
+    it 'should work currently' do
+      Timecop.travel(Date.today.beginning_of_day) do
+        kind.yesterday.count.should eq(0)
+        kind.today.count.should eq(@count)
+        kind.tomorrow.count.should eq(0)
+      end
+    end
+
+    it 'should work in the future' do
+      Timecop.travel(Date.today.beginning_of_day + 1.day) do
+        kind.yesterday.count.should eq(@count)
+        kind.today.count.should eq(0)
+        kind.tomorrow.count.should eq(0)
+      end
     end
 
   end
