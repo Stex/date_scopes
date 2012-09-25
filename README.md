@@ -39,13 +39,43 @@ Your ActiveRecord based models will now have the following automatic scopes:
 * last\_month, this\_month, next\_month
 * last\_week, this\_week, next\_week
 
+There are also utility scopes:
+
+* in\_year\_of
+* in\_month\_of
+* in\_week\_of
+
 This means the following will work:
 
 ```ruby
-  Widget.this_month
+  Widget.this_month.each do |w|
+    puts w.to_s
+  end
+
+  Widget.last_month.limit(4).each do |w|
+    puts w.to_s
+  end
+
+  Widget.in_month_of(Date.new(2012, 2, 7)).each do |w|
+    puts w.to_s
+  end
+```
+
+We can now also take a field to use instead of :created\_at:
+
+```ruby
+  Widget.last_month(:start_production_time).limit(4).each do |w|
+    puts w.to_s
+  end
 ```
 
 # Changes
+
+## 0.1.0
+* Renamed to simple\_date\_scopes so we can push to rubygems
+
+## 0.0.5-0.0.7
+* Cleanups
 
 ## 0.0.4
 * Fixed a nasty bug that made the scopes ignore records created on the current date

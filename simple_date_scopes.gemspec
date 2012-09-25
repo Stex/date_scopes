@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'date_scopes/version'
+require 'simple_date_scopes/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "date_scopes"
-  gem.version       = DateScopes::VERSION
+  gem.name          = "simple_date_scopes"
+  gem.version       = SimpleDateScopes::VERSION
   gem.authors       = ["Peter Hoeg"]
   gem.email         = ["peter@speartail.com"]
-  gem.description   = %q{A set of standard date scopes to handle years, months and weeks based on created_at}
-  gem.summary       = %q{A set of standard date scopes to handle years, months and weeks based on created_at}
+  gem.description   = %q{A set of standard date scopes to handle years, months and weeks based on created_at or another field}
+  gem.summary       = %q{A set of standard date scopes to handle years, months and weeks based on created_at or another field}
   gem.homepage      = "http://speartail.com"
 
   gem.files         = `git ls-files`.split($/)
@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'factory_girl'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'sqlite3'
   gem.add_development_dependency 'timecop', '>= 0.5.1'
 end

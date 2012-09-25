@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 class Widget < ActiveRecord::Base
-  include ::DateScopes
+  include ::SimpleDateScopes
 end
 
-describe 'Shared Date Scopes' do
+describe 'Simple Date Scopes' do
 
-  it_should_behave_like 'shared date scopes' do
+  it_should_behave_like 'simple date scopes' do
     let(:kind) { Widget }
   end
 

@@ -1,4 +1,8 @@
-shared_examples_for 'shared date scopes' do
+shared_examples_for 'simple date scopes' do
+
+  def debug_kind(kind)
+    kind.all.each { |i| p "#{i.id} #{i.created_at}" }
+  end
 
   before :each do
     @count = 4
@@ -14,7 +18,6 @@ shared_examples_for 'shared date scopes' do
   it 'should support last_year, this_year and next_year' do
     @old_item.update_attribute :created_at, Time.now - 1.years
     @new_item.update_attribute :created_at, Time.now + 1.years
-    kind.all.each { |i| p "#{i.id} #{i.created_at}" }
     kind.last_year.count.should eq(1)
     kind.this_year.count.should eq(2)
     kind.next_year.count.should eq(1)

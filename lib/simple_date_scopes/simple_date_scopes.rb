@@ -1,6 +1,6 @@
 require 'active_record'
 
-module DateScopes
+module SimpleDateScopes
 
   def self.included(base_class)
 
@@ -30,6 +30,10 @@ module DateScopes
       scope :last_year, ->(f = 'created_at') { in_year_of(Date.today - 1.years, f) }
       scope :this_year, ->(f = 'created_at') { in_year_of(Date.today, f) }
       scope :next_year, ->(f = 'created_at') { in_year_of(Date.today + 1.years, f) }
+
+      private
+      def in_x_of(date, field, method)
+      end
     end
   end
 
