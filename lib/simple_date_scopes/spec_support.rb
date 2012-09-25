@@ -11,7 +11,7 @@ shared_examples_for 'simple date scopes' do
     @new_item = kind.last
   end
 
-  it "should have 4 items" do
+  it 'should have 4 items' do
     kind.count.should eq(4)
   end
 

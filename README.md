@@ -71,6 +71,9 @@ We can now also take a field to use instead of :created\_at:
 
 # Changes
 
+## 0.1.1
+* Refactoring to use a common private method instead of 3 almost identical methods
+
 ## 0.1.0
 * Renamed to simple\_date\_scopes so we can push to rubygems
 
