@@ -7,6 +7,11 @@ A super tiny gem that provides basic year, month and week scopes.
 Something like this already existed in various forms but I simply wanted to do
 my own thing instead.
 
+## TODO
+
+* create classmethods for injecting the functionality so we can specify the
+  date field just once
+
 ## Installation
 
 Add this line to your application's Gemfile:
