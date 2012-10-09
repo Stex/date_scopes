@@ -7,6 +7,9 @@ ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 ActiveRecord::Migration.create_table :widgets do |t|
   t.timestamps
 end
+ActiveRecord::Migration.create_table :default_widgets do |t|
+  t.timestamps
+end
 
 # add missing helpers
 module ActiveModel::Validations

@@ -7,11 +7,6 @@ A super tiny gem that provides basic year, month and week scopes.
 Something like this already existed in various forms but I simply wanted to do
 my own thing instead.
 
-## TODO
-
-* create classmethods for injecting the functionality so we can specify the
-  date field just once
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -22,17 +17,17 @@ And then execute:
 
     $ bundle
 
-If you want to test that your models are using it properly, you can do:
-
-1. include it in spec_helper.rb
+Your models can now do:
 ```ruby
-require 'date_scopes/spec_support'
+class Widget < ActiveRecord::Base
+  acts_as_date_scopes
+end
 ```
 
-2. and inside your model_spec.rb
+Or alternatively if you want to specify the field for the logic:
 ```ruby
-it_should_behave_like 'shared date scopes' do
-    let(:kind) { MyModelName }
+class OtherWidget < ActiveRecord::Base
+  acts_as_date_scopes_on :produced_at
 end
 ```
 
@@ -46,9 +41,9 @@ Your ActiveRecord based models will now have the following automatic scopes:
 
 There are also utility scopes:
 
-* in\_year\_of
-* in\_month\_of
-* in\_week\_of
+* in\_year\_of [date]
+* in\_month\_of [date]
+* in\_week\_of [date]
 
 This means the following will work:
 
@@ -66,15 +61,25 @@ This means the following will work:
   end
 ```
 
-We can now also take a field to use instead of :created\_at:
+If you want to test that your models are using it properly, you can do:
 
+1. include it in spec\_helper.rb
 ```ruby
-  Widget.last_month(:start_production_time).limit(4).each do |w|
-    puts w.to_s
-  end
+require 'date_scopes/spec_support'
+```
+
+2. and inside your model\_spec.rb
+```ruby
+it_should_behave_like 'shared date scopes' do
+    let(:kind) { MyModelName }
+    let(:field) { :created_at }
+end
 ```
 
 # Changes
+
+## 0.2.0
+* Use class methods instead so we can just specify the data field once
 
 ## 0.1.1
 * Refactoring to use a common private method instead of 3 almost identical methods
