@@ -48,17 +48,17 @@ There are also utility scopes:
 This means the following will work:
 
 ```ruby
-  Widget.this_month.each do |w|
-    puts w.to_s
-  end
+Widget.this_month.each do |w|
+  puts w.to_s
+end
 
-  Widget.last_month.limit(4).each do |w|
-    puts w.to_s
-  end
+Widget.last_month.limit(4).each do |w|
+  puts w.to_s
+end
 
-  Widget.in_month_of(Date.new(2012, 2, 7)).each do |w|
-    puts w.to_s
-  end
+Widget.in_month_of(Date.new(2012, 2, 7)).each do |w|
+  puts w.to_s
+end
 ```
 
 If you want to test that your models are using it properly, you can do:
