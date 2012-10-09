@@ -10,14 +10,8 @@ end
 
 describe 'Simple Date Scopes' do
 
-  it_should_behave_like 'simple date scopes' do
-    let(:kind) { Widget }
-    let(:field) { :updated_at }
-  end
+  it_should_behave_like 'simple date scopes', Widget, :updated_at
 
-  it_should_behave_like 'simple date scopes' do
-    let(:kind) { DefaultWidget }
-    let(:field) { :created_at }
-  end
+  it_should_behave_like 'simple date scopes', DefaultWidget
 
 end

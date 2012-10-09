@@ -1,10 +1,11 @@
-shared_examples_for 'simple date scopes' do
+shared_examples_for 'simple date scopes' do |kind,field|
 
   before :each do
     @count = 4
     @count.times { FactoryGirl.create kind.name.underscore.to_sym }
     @old_item = kind.first
     @new_item = kind.last
+    field ||= ActiveRecord::Acts::SimpleDateScopes::DEFAULT_FIELD
   end
 
   it 'should have 4 items' do

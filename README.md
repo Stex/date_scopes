@@ -78,6 +78,9 @@ end
 
 # Changes
 
+## 0.3.0
+* Changed the API again for specs, so we do not have to specify the field. Just skip 0.2.0.
+
 ## 0.2.0
 * Use class methods instead so we can just specify the data field once
 
