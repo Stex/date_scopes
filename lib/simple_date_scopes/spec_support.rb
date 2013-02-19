@@ -1,15 +1,16 @@
 shared_examples_for 'simple date scopes' do |kind,field|
 
+  COUNT ||= 4
+
   before :each do
-    @count = 4
-    @count.times { FactoryGirl.create kind.name.underscore.to_sym }
+    COUNT.times { FactoryGirl.create kind.name.underscore.to_sym }
     @old_item = kind.first
     @new_item = kind.last
-    field ||= ActiveRecord::Acts::SimpleDateScopes::DEFAULT_FIELD
+    field ||= SimpleDateScopes::DEFAULT_FIELD
   end
 
-  it 'should have 4 items' do
-    kind.count.should eq(4)
+  it "should have #{COUNT} items" do
+    kind.count.should eq(COUNT)
   end
 
   it 'should support last_year, this_year and next_year' do
@@ -72,21 +73,21 @@ shared_examples_for 'simple date scopes' do |kind,field|
       Timecop.travel(Date.today.beginning_of_day - 1.day) do
         kind.yesterday.count.should eq(0)
         kind.today.count.should eq(0)
-        kind.tomorrow.count.should eq(@count)
+        kind.tomorrow.count.should eq(COUNT)
       end
     end
 
     it 'should work currently' do
       Timecop.travel(Date.today.beginning_of_day) do
         kind.yesterday.count.should eq(0)
-        kind.today.count.should eq(@count)
+        kind.today.count.should eq(COUNT)
         kind.tomorrow.count.should eq(0)
       end
     end
 
     it 'should work in the future' do
       Timecop.travel(Date.today.beginning_of_day + 1.day) do
-        kind.yesterday.count.should eq(@count)
+        kind.yesterday.count.should eq(COUNT)
         kind.today.count.should eq(0)
         kind.tomorrow.count.should eq(0)
       end
@@ -100,21 +101,21 @@ shared_examples_for 'simple date scopes' do |kind,field|
       Timecop.travel(Date.today.beginning_of_week - 1.weeks) do
         kind.last_week.count.should eq(0)
         kind.this_week.count.should eq(0)
-        kind.next_week.count.should eq(@count)
+        kind.next_week.count.should eq(COUNT)
       end
     end
 
     it 'should work currently' do
       Timecop.travel(Date.today.beginning_of_week) do
         kind.last_week.count.should eq(0)
-        kind.this_week.count.should eq(@count)
+        kind.this_week.count.should eq(COUNT)
         kind.next_week.count.should eq(0)
       end
     end
 
     it 'should work in the future' do
       Timecop.travel(Date.today.beginning_of_week + 1.weeks) do
-        kind.last_week.count.should eq(@count)
+        kind.last_week.count.should eq(COUNT)
         kind.this_week.count.should eq(0)
         kind.next_week.count.should eq(0)
       end
@@ -128,21 +129,21 @@ shared_examples_for 'simple date scopes' do |kind,field|
       Timecop.travel(Date.today.beginning_of_month - 1.months) do
         kind.last_month.count.should eq(0)
         kind.this_month.count.should eq(0)
-        kind.next_month.count.should eq(@count)
+        kind.next_month.count.should eq(COUNT)
       end
     end
 
     it 'should work currently' do
       Timecop.travel(Date.today.beginning_of_month) do
         kind.last_month.count.should eq(0)
-        kind.this_month.count.should eq(@count)
+        kind.this_month.count.should eq(COUNT)
         kind.next_month.count.should eq(0)
       end
     end
 
     it 'should work in the future' do
       Timecop.travel(Date.today.beginning_of_month + 1.months) do
-        kind.last_month.count.should eq(@count)
+        kind.last_month.count.should eq(COUNT)
         kind.this_month.count.should eq(0)
         kind.next_month.count.should eq(0)
       end
@@ -156,21 +157,21 @@ shared_examples_for 'simple date scopes' do |kind,field|
       Timecop.travel(Date.today.beginning_of_year - 1.years) do
         kind.last_year.count.should eq(0)
         kind.this_year.count.should eq(0)
-        kind.next_year.count.should eq(@count)
+        kind.next_year.count.should eq(COUNT)
       end
     end
 
     it 'should work currently' do
       Timecop.travel(Date.today.beginning_of_year) do
         kind.last_year.count.should eq(0)
-        kind.this_year.count.should eq(@count)
+        kind.this_year.count.should eq(COUNT)
         kind.next_year.count.should eq(0)
       end
     end
 
     it 'should work in the future' do
       Timecop.travel(Date.today.beginning_of_year + 1.years) do
-        kind.last_year.count.should eq(@count)
+        kind.last_year.count.should eq(COUNT)
         kind.this_year.count.should eq(0)
         kind.next_year.count.should eq(0)
       end
