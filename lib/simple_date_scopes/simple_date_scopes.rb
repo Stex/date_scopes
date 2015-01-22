@@ -1,63 +1,56 @@
-require 'active_record'
+module SimpleDateScopes
 
-module ActiveRecord
-  module Acts
-    module SimpleDateScopes
+  DEFAULT_FIELD = :created_at
 
-      DEFAULT_FIELD = :created_at
+  def self.included(base_class)
+    base_class.extend(ClassMethods)
+  end
 
-      def self.included(base_class)
-        base_class.extend(ClassMethods)
-      end
+  module ClassMethods
 
-      module ClassMethods
+    def simple_date_scopes_on(field = DEFAULT_FIELD)
+      named_scope acts_as_date_scope_name(field, :yesterday),  lambda { in_x_of(Date.today - 1.day, field, :day) }
+      named_scope acts_as_date_scope_name(field, :today),      lambda { in_x_of(Date.today, field, :day) }
+      named_scope acts_as_date_scope_name(field, :tomorrow),   lambda { in_x_of(Date.today + 1.day, field, :day) }
 
-        def acts_as_date_scopes_on(field = DEFAULT_FIELD)
+      named_scope acts_as_date_scope_name(field, :in_week_of), lambda {|date| in_x_of(date, field, :week) }
+      named_scope acts_as_date_scope_name(field, :last_week),  lambda { in_x_of(Date.today - 7.days, field, :week) }
+      named_scope acts_as_date_scope_name(field, :this_week),  lambda { in_x_of(Date.today, field, :week) }
+      named_scope acts_as_date_scope_name(field, :next_week),  lambda { in_x_of(Date.today + 7.days, field, :week) }
 
-          scope :yesterday, -> { in_x_of(Date.today - 1.day, field, :day) }
-          scope :today,     -> { in_x_of(Date.today, field, :day) }
-          scope :tomorrow,  -> { in_x_of(Date.today + 1.day, field, :day) }
+      named_scope acts_as_date_scope_name(field, :in_month_of), lambda {|date| in_x_of(date, field, :month) }
+      named_scope acts_as_date_scope_name(field, :last_month),  lambda { in_x_of(Date.today - 1.months, field, :month) }
+      named_scope acts_as_date_scope_name(field, :this_month),  lambda { in_x_of(Date.today, field, :month) }
+      named_scope acts_as_date_scope_name(field, :next_month),  lambda { in_x_of(Date.today + 1.months, field, :month) }
 
-          scope :in_week_of, ->(date) { in_x_of(date, field, :week) }
-          scope :last_week, -> { in_week_of(Date.today - 7.days) }
-          scope :this_week, -> { in_week_of(Date.today) }
-          scope :next_week, -> { in_week_of(Date.today + 7.days) }
+      named_scope acts_as_date_scope_name(field, :in_year_of),  lambda {|date| in_x_of(date, field, :year) }
+      named_scope acts_as_date_scope_name(field, :last_year),   lambda { in_x_of(Date.today - 1.years, field, :year) }
+      named_scope acts_as_date_scope_name(field, :this_year),   lambda { in_x_of(Date.today, field, :year) }
+      named_scope acts_as_date_scope_name(field, :next_year),   lambda { in_x_of(Date.today + 1.years, field, :year) }
+    end
 
-          scope :in_month_of, ->(date) { in_x_of(date, field, :month) }
-          scope :last_month, -> { in_month_of(Date.today - 1.months) }
-          scope :this_month, -> { in_month_of(Date.today) }
-          scope :next_month, -> { in_month_of(Date.today + 1.months) }
+    def simple_date_scopes
+      simple_date_scopes_on DEFAULT_FIELD
+    end
 
-          scope :in_year_of, ->(date) { in_x_of(date, field, :year) }
-          scope :last_year, -> { in_year_of(Date.today - 1.years) }
-          scope :this_year, -> { in_year_of(Date.today) }
-          scope :next_year, -> { in_year_of(Date.today + 1.years) }
+    private
+    def in_x_of(date, field, method)
+      {
+          :conditions => ["#{field} BETWEEN ? AND ?", date.send("beginning_of_#{method.to_s}").beginning_of_day,
+                                                      date.send("end_of_#{method.to_s}").end_of_day]
+      }
+    end
 
-          # extend SimpleDateScopes::SingletonMethods
-          # include SimpleDateScopes::InstanceMethods
-
-        end
-
-        def acts_as_date_scopes
-          acts_as_date_scopes_on DEFAULT_FIELD
-        end
-
-        private
-        def in_x_of(date, field, method)
-          where("#{field.to_s} BETWEEN ? AND ?",
-                date.send("beginning_of_#{method.to_s}".to_sym).beginning_of_day,
-                date.send("end_of_#{method.to_s}".to_sym).end_of_day)
-        end
-      end
-
-      # module InstanceMethods
-      # end
-
-      # module SingletonMethods
-      # end
-
+    def acts_as_date_scope_name(field, scope_name)
+      "#{field}_#{scope_name}".to_sym
     end
   end
+
+  # module InstanceMethods
+  # end
+
+  # module SingletonMethods
+  # end
+
 end
 
-ActiveRecord::Base.send(:include, ActiveRecord::Acts::SimpleDateScopes)

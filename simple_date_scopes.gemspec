@@ -10,19 +10,13 @@ Gem::Specification.new do |gem|
   gem.email         = ["peter@speartail.com"]
   gem.description   = %q{A set of standard date scopes to handle years, months and weeks based on created_at or another field}
   gem.summary       = %q{A set of standard date scopes to handle years, months and weeks based on created_at or another field}
-  gem.homepage      = "http://speartail.com"
+  gem.homepage      = 'http://www.github.com/stex/date_scopes'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'activerecord', '~> 3.0'
-
-  gem.add_development_dependency 'factory_girl'
+  gem.add_dependency 'activerecord', '~> 2.3'
   gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'simplecov'
-  gem.add_development_dependency 'sqlite3'
-  gem.add_development_dependency 'timecop', '>= 0.5.1'
 end
