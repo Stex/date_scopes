@@ -8,25 +8,28 @@ module SimpleDateScopes
 
   module ClassMethods
 
-    def simple_date_scopes_on(field = DEFAULT_FIELD)
-      named_scope acts_as_date_scope_name(field, :yesterday),  lambda { in_x_of(Date.today - 1.day, field, :day) }
-      named_scope acts_as_date_scope_name(field, :today),      lambda { in_x_of(Date.today, field, :day) }
-      named_scope acts_as_date_scope_name(field, :tomorrow),   lambda { in_x_of(Date.today + 1.day, field, :day) }
+    def simple_date_scopes_on(field, options = {})
+      table_name = options.delete(:table_name) || self.table_name
+      prefix     = options.delete(:prefix)
 
-      named_scope acts_as_date_scope_name(field, :in_week_of), lambda {|date| in_x_of(date, field, :week) }
-      named_scope acts_as_date_scope_name(field, :last_week),  lambda { in_x_of(Date.today - 7.days, field, :week) }
-      named_scope acts_as_date_scope_name(field, :this_week),  lambda { in_x_of(Date.today, field, :week) }
-      named_scope acts_as_date_scope_name(field, :next_week),  lambda { in_x_of(Date.today + 7.days, field, :week) }
+      named_scope acts_as_date_scope_name(table_name, field, :yesterday, prefix),  lambda { in_x_of(table_name, Date.today - 1.day, field, :day, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :today, prefix),      lambda { in_x_of(table_name, Date.today, field, :day, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :tomorrow, prefix),   lambda { in_x_of(table_name, Date.today + 1.day, field, :day, options) }
 
-      named_scope acts_as_date_scope_name(field, :in_month_of), lambda {|date| in_x_of(date, field, :month) }
-      named_scope acts_as_date_scope_name(field, :last_month),  lambda { in_x_of(Date.today - 1.months, field, :month) }
-      named_scope acts_as_date_scope_name(field, :this_month),  lambda { in_x_of(Date.today, field, :month) }
-      named_scope acts_as_date_scope_name(field, :next_month),  lambda { in_x_of(Date.today + 1.months, field, :month) }
+      named_scope acts_as_date_scope_name(table_name, field, :in_week_of, prefix), lambda {|date| in_x_of(table_name, date, field, :week, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :last_week, prefix),  lambda { in_x_of(table_name, Date.today - 7.days, field, :week, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :this_week, prefix),  lambda { in_x_of(table_name, Date.today, field, :week, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :next_week, prefix),  lambda { in_x_of(table_name, Date.today + 7.days, field, :week, options) }
 
-      named_scope acts_as_date_scope_name(field, :in_year_of),  lambda {|date| in_x_of(date, field, :year) }
-      named_scope acts_as_date_scope_name(field, :last_year),   lambda { in_x_of(Date.today - 1.years, field, :year) }
-      named_scope acts_as_date_scope_name(field, :this_year),   lambda { in_x_of(Date.today, field, :year) }
-      named_scope acts_as_date_scope_name(field, :next_year),   lambda { in_x_of(Date.today + 1.years, field, :year) }
+      named_scope acts_as_date_scope_name(table_name, field, :in_month_of, prefix), lambda {|date| in_x_of(table_name, date, field, :month, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :last_month, prefix),  lambda { in_x_of(table_name, Date.today - 1.months, field, :month, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :this_month, prefix),  lambda { in_x_of(table_name, Date.today, field, :month, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :next_month, prefix),  lambda { in_x_of(table_name, Date.today + 1.months, field, :month, options) }
+
+      named_scope acts_as_date_scope_name(table_name, field, :in_year_of, prefix),  lambda {|date| in_x_of(table_name, date, field, :year, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :last_year, prefix),   lambda { in_x_of(table_name, Date.today - 1.years, field, :year, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :this_year, prefix),   lambda { in_x_of(table_name, Date.today, field, :year, options) }
+      named_scope acts_as_date_scope_name(table_name, field, :next_year, prefix),   lambda { in_x_of(table_name, Date.today + 1.years, field, :year, options) }
     end
 
     def simple_date_scopes
@@ -34,23 +37,16 @@ module SimpleDateScopes
     end
 
     private
-    def in_x_of(date, field, method)
-      {
-          :conditions => ["#{field} BETWEEN ? AND ?", date.send("beginning_of_#{method.to_s}").beginning_of_day,
-                                                      date.send("end_of_#{method.to_s}").end_of_day]
-      }
+
+    def in_x_of(table_name, date, field, method, options)
+      start_date = date.send("beginning_of_#{method.to_s}").beginning_of_day
+      end_date   = date.send("end_of_#{method.to_s}").end_of_day
+      options.merge({:conditions => {table_name => {field => (start_date..end_date)}}})
     end
 
-    def acts_as_date_scope_name(field, scope_name)
-      "#{field}_#{scope_name}".to_sym
+    def acts_as_date_scope_name(table_name, field, scope_name, prefix)
+      [prefix, field, scope_name].compact.join('_')
     end
   end
-
-  # module InstanceMethods
-  # end
-
-  # module SingletonMethods
-  # end
-
 end
 
