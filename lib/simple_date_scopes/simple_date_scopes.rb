@@ -30,6 +30,13 @@ module SimpleDateScopes
       named_scope acts_as_date_scope_name(table_name, field, :last_year, prefix),   lambda { in_x_of(table_name, Date.today - 1.years, field, :year, options) }
       named_scope acts_as_date_scope_name(table_name, field, :this_year, prefix),   lambda { in_x_of(table_name, Date.today, field, :year, options) }
       named_scope acts_as_date_scope_name(table_name, field, :next_year, prefix),   lambda { in_x_of(table_name, Date.today + 1.years, field, :year, options) }
+
+      named_scope acts_as_date_scope_name(table_name, field, :between, prefix),
+                  lambda {|s, e|
+                    start_date = (s.is_a?(String) ? Date.parse(s) : s).beginning_of_day
+                    end_date   = (e.is_a?(String) ? Date.parse(e) : e).end_of_day
+                    options.merge({:conditions => {table_name => {field => (start_date..end_date)}}})
+                  }
     end
 
     def simple_date_scopes
