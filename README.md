@@ -15,40 +15,78 @@ And then execute:
 
 ## Usage
 
+You can add a set of predefined date scopes for a certain database column by 
+calling `simple_date_scopes_on` in the corresponding model:
+
 ```ruby
-class OtherWidget < ActiveRecord::Base
-  simple_date_scopes_on :produced_at
+class Booking < ActiveRecord::Base
+  simple_date_scopes_on :created_at
 end
 ```
 
-Your ActiveRecord based models will now have the following automatic scopes:
+This will generate the following groups of scopes:
+
+**Relative Date Scopes**
 
 * last\_year, this\_year, next\_year
 * last\_month, this\_month, next\_month
 * last\_week, this\_week, next\_week
 * yesterday, today, tomorrow
 
-There are also utility scopes:
+**Week, Month and Year Scopes**
 
 * in\_year\_of [date]
 * in\_month\_of [date]
 * in\_week\_of [date]
 
-This means the following will work:
+**Range Scopes**
+
+* between [start_date] [end_date]
+
+Start and end date may either be Date (or DateTime) objects or Strings Date.parse() can handle.
+
+## Examples
 
 ```ruby
-Widget.this_month.all.each do |w|
+Booking.created_at_this_month.all.each do |w|
   puts w.to_s
 end
 
-Widget.last_month.all(:limit => 4).each do |w|
+Widget.created_at_last_month.all(:limit => 4).each do |w|
   puts w.to_s
 end
 
-Widget.in_month_of(Date.new(2012, 2, 7)).all.each do |w|
+Booking.created_at_in_month_of(Date.new(2012, 2, 7)).all.each do |w|
+  puts w.to_s
+end
+
+Booking.created_at_in_month_of('2012-03-25').all.each do |w|
   puts w.to_s
 end
 ```
+
+## Naming
+
+All scopes are prefixed with the field they were defined on, in this case `created_at`.
+If you need another custom prefix, you may specify it by passing in `:prefix` to `simple_date_scopes_on` as
+second argument:
+
+```ruby
+simple_date_scopes_on :created_at, :prefix => 'scoped'
+```
+
+This would generate scope names in the format `scoped_created_at_...`
+
+## Custom Tables
+
+Sometimes it might be useful to generate date scopes for an associated model/table,
+e.g. for sorting purposes. The table name used by the scope can be passed in with `:table_name`:
+
+```ruby
+simple_date_scopes_on :created_at, :table_name => 'booking_position', :prefix => 'booking_position'
+```
+
+This would generate scopes of the format `booking_position_created_at_...`.
 
 ## Contributing
 
