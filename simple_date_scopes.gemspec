@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["stex@sterex.de"]
   gem.description   = %q{A set of standard date scopes to handle years, months and weeks based on created_at or another field. Based on simple_date_scopes.}
   gem.summary       = %q{A set of standard date scopes to handle years, months and weeks based on created_at or another field.}
-  gem.homepage      = 'http://www.github.com/stex/date_scopes'
+  gem.homepage      = 'http://www.github.com/stex/less_simple_date_scopes'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
